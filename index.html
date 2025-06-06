@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DANs Portfolio</title>
+    <link rel="icon" type="image/png" href="src/Favcon.PNG">
+    <link rel="shortcut icon" type="image/png" href="src/Favcon.PNG">
+    <link rel="apple-touch-icon" href="src/Favcon.PNG">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quantico:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    <style>
+       /* .lottie-container {
+            width: 80%;
+            height: auto;
+            margin: 3% auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 80%;
+            transition: all 1s ease-in-out;
+        }
+
+        .lottie-container:hover {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+
+        #matrixlottie {
+            margin-top: 0;
+        } */
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    <div class="scroll-to-top"></div>
+    <script>
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+        let followerX = 0;
+        let followerY = 0;
+        let isMoving = false;
+        let moveTimeout;
+
+        const scrollToTop = document.querySelector('.scroll-to-top');
+        let scrollTimeout;
+        let isScrolling;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            isMoving = true;
+            
+            clearTimeout(moveTimeout);
+            moveTimeout = setTimeout(() => {
+                isMoving = false;
+            }, 100);
+        });
+
+        function lerp(start, end, factor) {
+            return start + (end - start) * factor;
+        }
+
+        function updateCursorPosition() {
+            
+            cursorX = lerp(cursorX, mouseX, 0.3);
+            cursorY = lerp(cursorY, mouseY, 0.3);
+
+           
+            followerX = lerp(followerX, cursorX, 0.15);
+            followerY = lerp(followerY, cursorY, 0.15);
+
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            cursorFollower.style.left = followerX + 'px';
+            cursorFollower.style.top = followerY + 'px';
+
+            requestAnimationFrame(updateCursorPosition);
+        }
+
+        document.addEventListener('mousedown', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            cursorFollower.style.transform = 'translate(-50%, -50%) scale(0.8)';
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+            cursorFollower.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+
+        
+        updateCursorPosition();
+
+        function checkScroll() {
+            const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            
+            if (scrollPercent > 30) {
+                clearTimeout(scrollTimeout);
+                scrollToTop.classList.add('visible');
+            } else {
+                scrollToTop.classList.remove('visible');
+            }
+        }
+
+        window.addEventListener('scroll', () => {
+            isScrolling = true;
+            clearTimeout(scrollTimeout);
+            
+            scrollTimeout = setTimeout(() => {
+                isScrolling = false;
+                scrollToTop.classList.remove('visible');
+            }, 1000);
+            
+            checkScroll();
+        });
+
+        scrollToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        function animateCodeSymbols() {
+            const symbols = document.querySelectorAll('.code-symbols i');
+            let currentIndex = 0;
+            let animationFrame;
+
+            function animateNext() {
+                // Remove active class from all symbols
+                symbols.forEach(symbol => symbol.classList.remove('active'));
+                
+                // Add active class to current symbol
+                symbols[currentIndex].classList.add('active');
+                
+                // Move to next symbol
+                currentIndex = (currentIndex + 1) % symbols.length;
+            }
+
+            // Start the animation with requestAnimationFrame for better performance
+            function startAnimation() {
+                animateNext();
+                animationFrame = setTimeout(startAnimation, 2000);
+            }
+
+            // Start the animation
+            startAnimation();
+        }
+
+        // Call the function when the page loads
+        document.addEventListener('DOMContentLoaded', animateCodeSymbols);
+
+        // Matrix Animation
+        function createMatrix() {
+            const matrixGrid = document.querySelector('.matrix-grid');
+            const cells = [];
+
+            // Create 8x8 grid
+            for (let i = 0; i < 64; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'matrix-cell';
+                
+                // Calculate row and column
+                const row = Math.floor(i / 8);
+                const col = i % 8;
+                
+                // Add checker class if row + column is even
+                if ((row + col) % 2 === 0) {
+                    cell.classList.add('checker');
+                }
+                
+                matrixGrid.appendChild(cell);
+                cells.push(cell);
+            }
+
+            // Create a MutationObserver for matrix updates
+            const matrixObserver = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        const cell = mutation.target;
+                        if (cell.classList.contains('fade-out')) {
+                            // Change number after fade out
+                            const value = Math.random() < 0.5 ? '0' : '1';
+                            cell.textContent = value;
+                            
+                            // Start fade in
+                            cell.classList.remove('fade-out');
+                            cell.classList.add('fade-in');
+                            
+                            // Remove fade-in class after animation
+                            setTimeout(() => {
+                                cell.classList.remove('fade-in');
+                            }, 500);
+                        }
+                    }
+                });
+            });
+
+            // Observe all cells for class changes
+            cells.forEach(cell => {
+                matrixObserver.observe(cell, {
+                    attributes: true,
+                    attributeFilter: ['class']
+                });
+            });
+
+            function updateMatrix() {
+                cells.forEach(cell => {
+                    // Start fade out
+                    cell.classList.add('fade-out');
+                });
+            }
+
+            // Initial update
+            updateMatrix();
+
+            // Update every 1 second
+            setInterval(updateMatrix, 1000);
+
+            // Cleanup observer when needed
+            window.addEventListener('beforeunload', () => {
+                matrixObserver.disconnect();
+            });
+        }
+
+        // Initialize matrix when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            createMatrix();
+        });
+    </script>
+    <canvas id="graphCanvas"></canvas>
+    <div class="container">
+        <header>
+            <img src="src/LOGO.png" alt="Your Logo" class="header-logo">
+            <h1>DAN'S PORTFOLIO</h1>
+            <nav>
+                <a href="#about">ABOUT ME</a>
+                <a href="#projects">PROJECTS</a>
+                <a href="#skills">SKILLS</a>
+                <a href="#contact">CONTACT ME</a>
+            </nav>
+        </header>
+
+        <div class="matrix-container">
+            <div class="matrix-grid"></div>
+        </div>
+
+     <!--   <div class="lottie-container" id="matrixlottie">
+            <lottie-player 
+                src="https://lottie.host/79ab5f76-0d8e-493a-81ce-b77937f9966e/xJ7bt28JKv.json" 
+                background="transparent" 
+                speed="1.5"
+                style="max-width: 555px;"
+                loop 
+                autoplay>
+            </lottie-player>
+        </div>  -->
+
+        <section id="about">
+            <h2>ABOUT ME</h2>
+            <div class="about-content">
+                <div class="code-symbols">
+                    <i class="fas fa-code"></i>
+                    <i class="fab fa-react"></i>
+                    <i class="fab fa-node-js"></i>
+                    <i class="devicon-rust-plain"></i>
+                    <i class="fab fa-wordpress"></i>
+                    <i class="fab fa-python"></i>
+                    <i class="fab fa-php"></i>
+                    <i class="devicon-tailwindcss-plain"></i>
+                    <i class="devicon-mongodb-plain"></i>
+                    <i class="devicon-threejs-original"></i>
+                    <i class="devicon-rust-plain"></i>
+                    <i class="devicon-go-plain"></i>
+                </div>
+                <div class="about-text">
+                    <p class="typing-text">Full-Stack Developer & AI Enthusiast</p>
+                    <div class="tech-highlights">
+                        <span class="highlight"><i class="fas fa-code"></i> Modern Web Stack</span>
+                        <span class="highlight"><i class="fas fa-layer-group"></i> Full-Stack Developer</span>
+                        <span class="highlight"><i class="fas fa-robot"></i> AI/ML Specialist</span>
+                        <span class="highlight"><i class="fab fa-bitcoin"></i> Blockchain Developer</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="projects">
+            <h2>PROJECTS</h2>
+            <div class="project-grid">
+                    
+                <div class="project-card">
+                    <h3>Rugs USA</h3>
+                    <p>International rug trading platform with advanced search and filtering capabilities.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-react"></i> React</span>
+                        <span class="tech-item"><i class="fab fa-node-js"></i> Node.js</span>
+                        <span class="tech-item"><i class="fas fa-database"></i> MongoDB</span>
+                    </div>
+                    <a href="https://rugsusa.com" class="project-link" target="_blank">Visit Project</a>
+                </div>
+
+
+
+                <div class="project-card">
+                    <h3>Hypertire</h3>
+                    <p>Automotive parts and accessories e-commerce platform with expert advice.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-react"></i> React</span>
+                        <span class="tech-item"><i class="fab fa-node-js"></i> Node.js</span>
+                        <span class="tech-item"><i class="fas fa-database"></i> MongoDB</span>
+                    </div>
+                    <a href="https://hypertire.com" class="project-link" target="_blank">Visit Project</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>Lingano</h3>
+                    <p>a user-friendly and robust platform dedicated to language learning.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-wordpress"></i> WordPress</span>
+                        <span class="tech-item"><i class="fab fa-php"></i> PHP</span>
+                        <span class="tech-item"><i class="devicon-mysql-plain"></i> MySQL</span>
+                        <span class="tech-item"><i class="fab fa-laravel"></i> Laravel</span>
+                    </div>
+                    <a href="https://lingano.com/" class="project-link" target="_blank">Visit Project</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>Shabahang Rugs</h3>
+                    <p>Specialized rug trading platform with unique designs and patterns.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-wordpress"></i> WordPress</span>
+                        <span class="tech-item"><i class="fab fa-php"></i> PHP</span>
+                        <span class="tech-item"><i class="devicon-mysql-plain"></i> MySQL</span>
+                        <span class="tech-item"><i class="fab fa-react"></i> React</span>
+                    </div>
+                    <a href="https://shabahangrugs.com" class="project-link" target="_blank">Visit Project</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>Khonya Gar</h3>
+                    <p>E-commerce platform for home appliances and electronics with advanced search and filtering capabilities.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-wordpress"></i> WordPress</span>
+                        <span class="tech-item"><i class="fab fa-php"></i> PHP</span>
+                        <span class="tech-item"><i class="fab fa-wordpress"></i> WooCommerce</span>
+                        <span class="tech-item"><i class="fab fa-laravel"></i> Laravel</span>
+                    </div>
+                    <a href="https://khonyagar.com" class="project-link" target="_blank">Visit Project</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>Iliya Trade</h3>
+                    <p>International trading platform for various products with secure transactions.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-wordpress"></i> WordPress</span>
+                        <span class="tech-item"><i class="fab fa-php"></i> PHP</span>
+                        <span class="tech-item"><i class="devicon-mysql-plain"></i> MySQL</span>
+                    </div>
+                    <a href="https://iliyatrade.com" class="project-link" target="_blank">Visit Project</a>
+                </div>
+
+               
+
+                <div class="project-card">
+                    <h3>Mehr-e-Giah</h3>
+                    <p>E-commerce platform for plants and gardening supplies with expert advice.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-react"></i> React</span>
+                        <span class="tech-item"><i class="fab fa-node-js"></i> Node.js</span>
+                        <span class="tech-item"><i class="fas fa-database"></i> MongoDB</span>
+                    </div>
+                    <a href="https://mehregiah.com" class="project-link" target="_blank">Visit Project</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>Masoud Clinic</h3>
+                    <p>Comprehensive medical clinic platform with advanced patient management and appointment scheduling.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-vuejs"></i> Vue.js</span>
+                        <span class="tech-item"><i class="fab fa-react"></i> React</span>
+                        <span class="tech-item"><i class="fab fa-node-js"></i> Node.js</span>
+                        <span class="tech-item"><i class="devicon-postgresql-plain"></i> PostgreSQL</span>
+                    </div>
+                    <a href="https://www.masoudclinic.ir/" class="project-link" target="_blank">Visit Project</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>Ilozi</h3>
+                    <p>E-commerce platform for various products with advanced search capabilities.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-react"></i> React</span>
+                        <span class="tech-item"><i class="fab fa-node-js"></i> Node.js</span>
+                        <span class="tech-item"><i class="fas fa-database"></i> MongoDB</span>
+                    </div>
+                    <a href="https://ilozi.com" class="project-link" target="_blank">Visit Project</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>Abzar Market</h3>
+                    <p>Tools and equipment e-commerce platform with expert advice.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-wordpress"></i> WordPress</span>
+                        <span class="tech-item"><i class="fab fa-php"></i> PHP</span>
+                        <span class="tech-item"><i class="fab fa-wordpress"></i> WooCommerce</span>
+                        <span class="tech-item"><i class="devicon-mysql-plain"></i> MySQL</span>
+                    </div>
+                    <a href="https://abzarmarket.com/" class="project-link" target="_blank">Visit Project</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>Balam Co</h3>
+                    <p>Digital solutions and services provider with innovative products.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-wordpress"></i> WordPress</span>
+                        <span class="tech-item"><i class="fab fa-php"></i> PHP</span>
+                        <span class="tech-item"><i class="devicon-mysql-plain"></i> MySQL</span>
+                    </div>
+                    <a href="https://balamco.com" class="project-link" target="_blank">Visit Project</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>Soha Clinic</h3>
+                    <p>Medical services and information platform with secure patient data management.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-wordpress"></i> WordPress</span>
+                        <span class="tech-item"><i class="fab fa-php"></i> PHP</span>
+                        <span class="tech-item"><i class="fab fa-wordpress"></i> WooCommerce</span>
+                        <span class="tech-item"><i class="devicon-mysql-plain"></i> MySQL</span>
+                    </div>
+                    <a href="https://sohaclinic.com" class="project-link" target="_blank">Visit Project</a>
+                </div>
+
+               
+
+                
+            </div>
+        </section>
+
+
+        
+
+        <section id="skills">
+            <h2>SKILLS</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <i class="fas fa-code skill-icon"></i>
+                    <h3>Frontend</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-react"></i> React</span>
+                        <span class="tech-item"><i class="fab fa-vuejs"></i> VueJS</span>
+                        <span class="tech-item"><i class="fab fa-react"></i> React Native</span>
+                        <span class="tech-item"><i class="fab fa-html5"></i> HTML & CSS</span>
+                        <span class="tech-item"><i class="fab fa-bootstrap"></i> Bootstrap</span>
+                        <span class="tech-item"><i class="fab fa-js"></i> jQuery</span>
+                        <span class="tech-item"><i class="fab fa-node-js"></i> Next.js</span>
+                        <span class="tech-item"><i class="devicon-threejs-original"></i> Three.js</span>
+
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fas fa-server skill-icon"></i>
+                    <h3>Backend</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-laravel"></i> Laravel</span>
+                        <span class="tech-item"><i class="fab fa-php"></i> PHP</span>
+                        <span class="tech-item"><i class="fab fa-node-js"></i> Node.js</span>
+                        <span class="tech-item"><i class="fab fa-node-js"></i> Express</span>
+                        <span class="tech-item"><i class="fas fa-plug"></i> REST API</span>
+                        <span class="tech-item"><i class="fas fa-code"></i> API</span>
+                        <span class="tech-item"><i class="devicon-flask-plain"></i> Flask</span>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fas fa-chart-line skill-icon"></i>
+                    <h3>SEO & Marketing</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-google"></i> Google Analytics</span>
+                        <span class="tech-item"><i class="fas fa-tags"></i> Google Tag Manager</span>
+                        <span class="tech-item"><i class="fas fa-search"></i> Search Console</span>
+                        <span class="tech-item"><i class="fas fa-chart-bar"></i> Ahrefs</span>
+                        <span class="tech-item"><i class="fas fa-key"></i> Keyword Planner</span>
+                        <span class="tech-item"><i class="fas fa-chart-pie"></i> Data Studio</span>
+                        <span class="tech-item"><i class="fab fa-google"></i> Google Ads</span>
+                        <span class="tech-item"><i class="fas fa-chart-line"></i> SEMrush</span>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fas fa-brain skill-icon"></i>
+                    <h3>AI & Machine Learning</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fas fa-brain"></i> AI Development</span>
+                        <span class="tech-item"><i class="fas fa-robot"></i> Machine Learning</span>
+                        <span class="tech-item"><i class="fas fa-network-wired"></i> Neural Networks</span>
+                        <span class="tech-item"><i class="fas fa-chart-line"></i> Data Science</span>
+                        <span class="tech-item"><i class="devicon-tensorflow-original"></i> TensorFlow</span>
+                        <span class="tech-item"><i class="devicon-pytorch-original"></i> PyTorch</span>
+                        <span class="tech-item"><i class="devicon-prolog-plain"></i> Prolog</span>
+                        <span class="tech-item"><i class="devicon-scala-plain"></i> Scala</span>
+                        <span class="tech-item"><i class="devicon-scikitlearn-plain"></i> scikit-learn</span>
+                    </div>
+                </div>
+               
+                <div class="skill-card">
+                    <i class="fas fa-laptop-code skill-icon"></i>
+                    <h3>Programming Languages</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-js"></i> JavaScript</span>
+                        <span class="tech-item"><i class="fab fa-python"></i> Python</span>
+                        <span class="tech-item"><i class="fab fa-node-js"></i> Node.js</span>
+                        <span class="tech-item"><i class="devicon-typescript-plain"></i> TypeScript</span>
+                        <span class="tech-item"><i class="devicon-go-plain"></i> Go</span>
+                        <span class="tech-item"><i class="devicon-rust-plain"></i> Rust</span>
+                        <span class="tech-item"><i class="devicon-cplusplus-plain"></i> C++</span>
+                        <span class="tech-item"><i class="devicon-r-plain"></i> R</span>
+                        <span class="tech-item"><i class="devicon-matlab-plain"></i> MATLAB</span>
+                        <span class="tech-item"><i class="devicon-tauri-plain"></i> Tauri</span>
+                    </div>
+                </div>
+
+               
+
+                <div class="skill-card">
+                    <i class="fas fa-cube skill-icon"></i>
+                    <h3>Web3 & Blockchain</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-bitcoin"></i> Bitcoin</span>
+                        <span class="tech-item"><i class="fab fa-ethereum"></i> Ethereum</span>
+                        <span class="tech-item"><i class="fas fa-link"></i> Tron</span>
+                        <span class="tech-item"><i class="fas fa-file-contract"></i> Smart Contracts</span>
+                        <span class="tech-item"><i class="fas fa-cube"></i> DApps</span>
+                        <span class="tech-item"><i class="devicon-solidity-plain"></i> Solidity</span>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fas fa-tools skill-icon"></i>
+                    <h3>DevOps</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-docker"></i> Docker</span>
+                        <span class="tech-item"><i class="fas fa-code-branch"></i> CI/CD</span>
+                        <span class="tech-item"><i class="fab fa-github"></i> GitHub</span>
+                        <span class="tech-item"><i class="fab fa-git-alt"></i> Git</span>
+                        <span class="tech-item"><i class="fab fa-linux"></i> Linux</span>
+                        <span class="tech-item"><i class="fab fa-ubuntu"></i> Ubuntu</span>
+                        <span class="tech-item"><i class="devicon-nginx-original"></i> Nginx</span>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fas fa-tasks skill-icon"></i>
+                    <h3>Project Management</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-trello"></i> Trello</span>
+                        <span class="tech-item"><i class="fab fa-jira"></i> Jira</span>
+                        <span class="tech-item"><i class="fas fa-users-cog"></i> Scrum</span>
+                        <span class="tech-item"><i class="devicon-prometheus-plain"></i> Prometheus</span>
+                        <span class="tech-item"><i class="devicon-selenium-plain"></i> Selenium</span>
+                    </div>
+                </div>
+
+                
+
+                <div class="skill-card">
+                    <i class="fas fa-database skill-icon"></i>
+                    <h3>Databases</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="devicon-mongodb-plain"></i> MongoDB</span>
+                        <span class="tech-item"><i class="devicon-sqlite-plain"></i> SQLite</span>
+                        <span class="tech-item"><i class="devicon-postgresql-plain"></i> PostgreSQL</span>
+                        <span class="tech-item"><i class="devicon-mysql-plain"></i> MySQL</span>
+                        <span class="tech-item"><i class="devicon-microsoftsqlserver-plain"></i> SQL Server</span>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <i class="fas fa-paint-brush skill-icon"></i>
+                    <h3>UI/UX & Frontend</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item"><i class="fab fa-bootstrap"></i> Bootstrap</span>
+                        <span class="tech-item"><i class="devicon-materialui-plain"></i> MaterialUI</span>
+                        <span class="tech-item"><i class="fab fa-css3"></i> CSS</span>
+                        <span class="tech-item"><i class="fab fa-html5"></i> HTML</span>                        <span class="tech-item"><i class="fab fa-css3-alt"></i> Tailwind</span>
+                        <span class="tech-item"><i class="devicon-figma-plain"></i> Figma</span>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+
+        <section id="contact">
+            <h2>CONTACT ME</h2>
+            <p>Let's work together! Feel free to reach out for collaboration opportunities.</p>
+            <div class="contact-links">
+                <a href="mailto:dan.son.of.bass@gmail.com" class="contact-item"><i class="fas fa-envelope"></i>GMAIL</a>
+                <a href="https://github.com/dansonofbass" class="contact-item" target="_blank"><i class="fab fa-github"></i> GITHUB</a>
+                <a href="https://twitter.com/Dansonofbass93" class="contact-item" target="_blank"><i class="fab fa-twitter"></i> X</a>
+                <a href="https://discord.gg/5x4DtKvM" class="contact-item" target="_blank"><i class="fab fa-discord"></i> DISCORD</a>
+                <a href="https://t.me/sonofbass" class="contact-item" target="_blank"><i class="fab fa-telegram"></i> TELEGRAM</a>
+            </div>
+        </section>
+
+       
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
