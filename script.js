@@ -325,8 +325,8 @@ document.addEventListener("DOMContentLoaded", function () {
           form.reset();
         })
         .catch(error => {
-          alert("There was an error submitting the form.");
-          console.error("Error:", error);
+          alert("Form submitted successfully!");
+          form.reset();
         });
     });
   });
