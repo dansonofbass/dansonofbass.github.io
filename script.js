@@ -310,29 +310,25 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
   
-      const data = {
-        name: form.name.value,
-        email: form.email.value,
-        phone: form.phone.value,
-        message: form.message.value
-      };
+      const formData = new FormData(form);
   
       fetch("https://script.google.com/macros/s/AKfycbzREFch2SJvikL4h59dmEmXK-ODPeOqjAKEIX4WjVfxTswmBOt60n2qeZVfhCqhZ2RR6Q/exec", {
         method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json"
-        }
+        body: formData
       })
-        .then(res => res.json())
         .then(response => {
+          if (!response.ok) throw new Error("Network response not ok");
+          return response.text(); // یا json اگر شما json برگردونی
+        })
+        .then(result => {
           alert("Form submitted successfully!");
           form.reset();
         })
         .catch(error => {
           alert("There was an error submitting the form.");
-          console.error("Error!", error.message);
+          console.error("Error:", error);
         });
     });
   });
+  
   
