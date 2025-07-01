@@ -2385,7 +2385,7 @@ header h1::before {
     align-items: center;
     margin-bottom: 3rem;
     border-radius: 14px;
-    padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+    padding: 1.5rem 1.5rem 1.5rem 1.5rem;
 }
 
 #contact-form h2 {
