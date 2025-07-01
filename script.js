@@ -303,3 +303,36 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 
 observer.observe(document.querySelector('.about-text')); 
+
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector(".custom-contact-form");
+  
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+  
+      const data = {
+        name: form.name.value,
+        email: form.email.value,
+        phone: form.phone.value,
+        message: form.message.value
+      };
+  
+      fetch("https://script.google.com/macros/s/AKfycbzREFch2SJvikL4h59dmEmXK-ODPeOqjAKEIX4WjVfxTswmBOt60n2qeZVfhCqhZ2RR6Q/exec", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(response => {
+          alert("Form submitted successfully!");
+          form.reset();
+        })
+        .catch(error => {
+          alert("There was an error submitting the form.");
+          console.error("Error!", error.message);
+        });
+    });
+  });
+  
