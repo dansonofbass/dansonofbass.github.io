@@ -153,14 +153,21 @@ if (document.readyState === 'loading') {
 function initializeApp() {
     handleSectionVisibility();
     
-    // Smooth scroll functionality
+    // Smooth scroll functionality with Lenis
     document.querySelectorAll('nav a').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
             const targetSection = document.querySelector(targetId);
             
-            if (targetSection) {
+            if (targetSection && window.lenis) {
+                window.lenis.scrollTo(targetSection, {
+                    offset: 0,
+                    duration: 1.5,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                });
+            } else if (targetSection) {
+                // Fallback to native smooth scroll
                 targetSection.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
@@ -330,5 +337,63 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
   });
+
+// Initialize Lenis for smooth scrolling
+let lenis;
+
+if (typeof Lenis !== 'undefined') {
+    lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 2,
+        infinite: false,
+    });
+
+    // Make lenis globally accessible
+    window.lenis = lenis;
+
+    function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+}
+
+// Matrix scale effect based on viewport visibility
+function initMatrixScale() {
+    const matrixContainer = document.querySelector('.matrix-container');
+
+    if (matrixContainer) {
+        const matrixObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const viewportPercentage = entry.intersectionRatio;
+                
+                // Calculate scale: 1 when 100% visible, 0.5 when not fully visible
+                // Smooth transition between 0.5 and 1 based on visibility
+                const scale = 0.5 + (viewportPercentage * 0.5);
+                
+                matrixContainer.style.transform = `scale(${scale})`;
+                matrixContainer.style.transition = 'transform 0.3s ease-out';
+            });
+        }, {
+            threshold: Array.from({ length: 101 }, (_, i) => i / 100) // 0 to 1 in 0.01 steps
+        });
+
+        matrixObserver.observe(matrixContainer);
+    }
+}
+
+// Initialize matrix scale effect when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMatrixScale);
+} else {
+    initMatrixScale();
+}
   
   
