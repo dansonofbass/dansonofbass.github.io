@@ -148,7 +148,6 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    margin-bottom: 0!important;
 }
 
 #graphCanvas {
@@ -1352,7 +1351,7 @@ section.visible {
 }
 
 html {
-    scroll-behavior: auto; /* Disabled native smooth scroll, using Lenis instead */
+    scroll-behavior: smooth;
     scroll-padding-top: 80px; /* Adjust based on your header height */
 }
 
@@ -2302,8 +2301,6 @@ header h1::before {
     min-height: 300px;
     max-height: 500px;
     background-color: rgba(0, 0, 0, 0.075);
-    transform-origin: center center;
-    will-change: transform;
 }
 
 .matrix-grid {

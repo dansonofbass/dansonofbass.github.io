@@ -1,9 +1,11 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
     <title>DANs Portfolio</title>
     <link rel="icon" type="image/png" href="src/Favcon.PNG">
     <link rel="shortcut icon" type="image/png" href="src/Favcon.PNG">
@@ -977,6 +979,27 @@
         }
       });
     });
+    </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Convert all .project-link[data-link] into safe anchors
+  document.querySelectorAll('.project-link[data-link]').forEach(function (a) {
+    var url = a.getAttribute('data-link');
+    if (!url) return;
+    // Build a path that survives GitHub Pages subfolder (user.github.io/repo/)
+    var bridgePath = new URL('redirect.html', location.href).pathname;
+    a.href = bridgePath + '?to=' + encodeURIComponent(url);
+    a.target = '_blank';
+    a.rel = 'noreferrer noopener';
+    a.referrerPolicy = 'no-referrer';
+  });
+
+  // Drop any existing click listeners that call preventDefault()/window.open
+  document.querySelectorAll('.project-link').forEach(function (a) {
+    var clone = a.cloneNode(true);
+    a.parentNode.replaceChild(clone, a);
+  });
+});
     </script>
 </body>
 </html> 
