@@ -261,11 +261,11 @@ document.querySelectorAll('.project-card, .skill-card').forEach(card => {
 /* Typing animation for about section */
 const typingText = document.querySelector('.typing-text');
 const texts = [
-    "Full-Stack Developer specialized in React & Node.js  ;",
-    "Also crafting WordPress themes & plugins with modern code  ;",
-    "Passionate about AI & Machine Learning  ;",
-    "Working on large academic projects & real-world applications  ;",
-    "Always eager to learn & collaborate in awesome teams  ;"
+  "Full-Stack Developer in React & Node.js ;",
+  "WordPress themes & plugin developer ;",
+  "AI & Machine Learning enthusiast ;",
+  "Building real-world web applications ;",
+  "Always learning and collaborating ;"
 ];
 let textIndex = 0;
 let charIndex = 0;
