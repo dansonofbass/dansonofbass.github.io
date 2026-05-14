@@ -1144,19 +1144,44 @@ section.visible {
 }
 
 .typing-text {
-    font-size: 20px;
+    font-size: clamp(14px, 4vw, 20px);
     color: var(--gray2);
-    margin-bottom: 1.5rem;
     position: relative;
-    display: inline-block;
-    min-height: 3rem;
+    display: block;
+
+    width: min(100%, 800px);
+    max-width: calc(100vw - 32px);
+    min-height: 5.6rem;
+
     line-height: 1.4;
     text-align: center;
-    max-width: 800px;
     margin: 0 auto 2rem;
+
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    box-sizing: border-box;
+
     opacity: 0;
     transform: translateY(20px);
     animation: fadeInUp 0.5s ease forwards;
+}
+
+@media (max-width: 768px) {
+    .typing-text {
+        font-size: clamp(14px, 4.2vw, 17px);
+        max-width: calc(100vw - 32px);
+        min-height: 6.2rem;
+        padding: 0 0.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .typing-text {
+        font-size: clamp(13px, 4vw, 16px);
+        max-width: calc(100vw - 28px);
+        min-height: 6.8rem;
+    }
 }
 
 @keyframes fadeInUp {
