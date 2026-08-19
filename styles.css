@@ -2558,3 +2558,547 @@ header h1::before {
   color: #ffffff;
   box-shadow: 0 2px 8px rgba(255, 255, 255, 0.281);
 }
+
+
+
+
+/* =========================
+CARDS of services
+========================= */
+
+
+
+.scd-31,
+.scd-31 *,
+.scd-31 *::before,
+.scd-31 *::after {
+    box-sizing: border-box;
+}
+
+.scd-31 {
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    background: var(--bg, #0a0a0a);
+
+    padding: 30px 20px;
+}
+
+
+/* =========================
+   INNER
+========================= */
+
+.scd-31__inner {
+    width: 100%;
+    height: 100%;
+
+    max-width: 1200px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.scd-31__heading {
+    width: 100%;
+
+    text-align: center;
+
+    flex: 0 0 auto;
+
+    margin-bottom: 5px;
+}
+
+
+.scd-31__eyebrow {
+    display: block;
+
+    color: var(--green3, #09e700);
+
+    font-size: 1rem;
+    font-weight: 600;
+
+    letter-spacing: 0.22em;
+
+    margin-bottom: 6px;
+}
+
+
+.scd-31__heading h2 {
+    margin: 0;
+
+    color: var(--gray2, #fcfcfc);
+
+    font-size: clamp(40px, 3vw, 70px)!important;
+
+    font-weight: 700;
+
+    letter-spacing: 0.05em;
+
+    line-height: 1;
+}
+
+
+/* small green line */
+
+.scd-31__heading h2::after {
+    content: "";
+
+    display: block;
+
+    width: 52px;
+    height: 3px;
+
+    margin: 12px auto 0;
+
+    border-radius: 20px;
+
+    background: linear-gradient(
+        90deg,
+        var(--green1, #07b400),
+        var(--green4, #0bff01)
+    );
+
+    box-shadow:
+        0 0 14px rgba(11, 255, 1, 0.25);
+}
+
+
+/* =========================
+   STAGE
+========================= */
+
+.scd-31__stage {
+    position: relative;
+
+    width: 100%;
+
+    flex: 1;
+
+    min-height: 0;
+
+    perspective: 1500px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =========================
+   STACK
+========================= */
+
+.scd-31__stack {
+    position: relative;
+
+    width: 360px;
+    height: 330px;
+
+    transform:
+        rotateX(50deg)
+        rotateZ(-32deg);
+
+    transform-style: preserve-3d;
+
+    transition:
+        transform 0.7s cubic-bezier(.3,.9,.3,1);
+}
+
+
+.scd-31__stage:hover .scd-31__stack {
+    transform:
+        rotateX(42deg)
+        rotateZ(-24deg);
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.scd-31__plane {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 320px;
+    height: 220px;
+
+    padding: 24px 24px;
+
+    border-radius: 16px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    transform-style: preserve-3d;
+
+    border:
+        1px solid rgba(11, 255, 1, 0.22);
+
+    box-shadow:
+        0 28px 55px rgba(0, 0, 0, 0.58),
+        0 0 30px rgba(9, 231, 0, 0.05);
+
+    transition:
+        transform 0.7s cubic-bezier(.3,.9,.3,1),
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+/* =========================
+   ICON
+========================= */
+
+.scd-31__icon {
+    font-size: 1.8rem;
+
+    color: var(--green3, #09e700);
+
+    margin-bottom: 13px;
+
+    text-shadow:
+        0 0 16px rgba(9, 231, 0, 0.35);
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.scd-31__tier {
+    margin: 0 0 9px;
+
+    color: var(--gray2, #fcfcfc);
+
+    font-size: 1.25rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.07em;
+
+    line-height: 1.25;
+
+    text-align: center;
+}
+
+
+/* =========================
+   TEXT
+========================= */
+
+.scd-31__feat {
+    margin: 0;
+
+    max-width: 205px;
+
+    color: var(--gray1, #919191);
+
+    font-size: 0.9rem;
+
+    line-height: 1.55;
+
+    text-align: center;
+}
+
+
+/* =========================
+   CARD BACKGROUNDS
+========================= */
+
+.scd-31__plane--p1 {
+    background:
+        linear-gradient(
+            145deg,
+            #151515,
+            #0c0c0c
+        );
+
+    transform:
+        translate(-50%, -50%)
+        translateZ(54px);
+}
+
+
+.scd-31__plane--p2 {
+    background:
+        linear-gradient(
+            145deg,
+            #121812,
+            #0b0f0b
+        );
+
+    transform:
+        translate(-50%, -50%)
+        translateZ(34px);
+}
+
+
+.scd-31__plane--p3 {
+    background:
+        linear-gradient(
+            145deg,
+            #102010,
+            #091009
+        );
+
+    transform:
+        translate(-50%, -50%)
+        translateZ(14px);
+}
+
+
+/* =========================
+   DESKTOP HOVER SEPARATION
+========================= */
+
+.scd-31__stage:hover .scd-31__plane--p1 {
+    transform:
+        translate(-50%, -50%)
+        translateZ(54px)
+        translate(-220px, -150px) !important;
+}
+
+.scd-31__stage:hover .scd-31__plane--p3 {
+    transform:
+        translate(-50%, -50%)
+        translateZ(14px)
+        translate(220px, 150px) !important;
+}
+
+.scd-31__stage:hover .scd-31__plane--p2 {
+    transform:
+        translate(-50%, -50%)
+        translateZ(34px)
+        translate(0, 0);
+}
+
+
+
+
+/* =========================
+   CARD HOVER
+========================= */
+
+.scd-31__plane:hover {
+    border-color:
+        rgba(11, 255, 1, 0.7);
+
+    box-shadow:
+        0 34px 70px rgba(0, 0, 0, 0.7),
+        0 0 35px rgba(9, 231, 0, 0.14);
+}
+
+
+/* =========================
+   MEDIUM DESKTOP / LAPTOP
+========================= */
+
+@media (max-width: 1100px) {
+
+    .scd-31__stack {
+        transform:
+            scale(0.9)
+            rotateX(50deg)
+            rotateZ(-32deg);
+    }
+
+
+    .scd-31__stage:hover .scd-31__stack {
+        transform:
+            scale(0.9)
+            rotateX(42deg)
+            rotateZ(-24deg);
+    }
+
+
+    .scd-31__stage:hover .scd-31__plane--p1 {
+        transform:
+            translate(-50%, -50%)
+            translateZ(54px)
+            translate(-145px, -125px);
+    }
+
+
+    .scd-31__stage:hover .scd-31__plane--p3 {
+        transform:
+            translate(-50%, -50%)
+            translateZ(14px)
+            translate(145px, 125px);
+    }
+
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 768px) {
+
+    .scd-31 {
+        padding:
+            24px 12px;
+    }
+
+
+    .scd-31__heading {
+        margin-bottom: 0;
+    }
+
+
+    .scd-31__heading h2 {
+        font-size: 2.2rem;
+    }
+
+
+    .scd-31__stack {
+        transform:
+            scale(0.72)
+            rotateX(50deg)
+            rotateZ(-32deg);
+    }
+
+
+    .scd-31__stage:hover .scd-31__stack {
+        transform:
+            scale(0.72)
+            rotateX(43deg)
+            rotateZ(-25deg);
+    }
+
+
+    .scd-31__stage:hover .scd-31__plane--p1 {
+        transform:
+            translate(-50%, -50%)
+            translateZ(54px)
+            translate(-125px, -105px);
+    }
+
+
+    .scd-31__stage:hover .scd-31__plane--p3 {
+        transform:
+            translate(-50%, -50%)
+            translateZ(14px)
+            translate(125px, 105px);
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 520px) {
+
+    .scd-31 {
+        height: 100vh;
+        max-height: 100vh;
+
+        padding:
+            20px 8px;
+    }
+
+
+    .scd-31__eyebrow {
+        font-size: 0.62rem;
+    }
+
+
+    .scd-31__heading h2 {
+        font-size: 1.9rem;
+    }
+
+
+    .scd-31__heading h2::after {
+        margin-top: 9px;
+    }
+
+
+    .scd-31__stack {
+        width: 310px;
+        height: 290px;
+
+        transform:
+            scale(0.63)
+            rotateX(49deg)
+            rotateZ(-31deg);
+    }
+
+
+    .scd-31__stage:hover .scd-31__stack {
+        transform:
+            scale(0.63)
+            rotateX(43deg)
+            rotateZ(-25deg);
+    }
+
+
+    .scd-31__stage:hover .scd-31__plane--p1 {
+        transform:
+            translate(-50%, -50%)
+            translateZ(54px)
+            translate(-105px, -90px);
+    }
+
+
+    .scd-31__stage:hover .scd-31__plane--p3 {
+        transform:
+            translate(-50%, -50%)
+            translateZ(14px)
+            translate(105px, 90px);
+    }
+
+}
+
+
+/* =========================
+   TOUCH DEVICES
+========================= */
+
+@media (hover: none) {
+
+    .scd-31__stack {
+        transform:
+            scale(0.76)
+            rotateX(45deg)
+            rotateZ(-27deg);
+    }
+
+}
+
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .scd-31__stack,
+    .scd-31__plane {
+        transition: none !important;
+    }
+
+}
